@@ -29,7 +29,7 @@ local state = {
 }
 
 local Expansion = {
-  OPEN = "▽",
+  OPEN = "⛛",
   CLOSED = "▷",
   NA = "◦",
 }
@@ -213,7 +213,7 @@ local function render_node(node)
   local nl = xplr.util.paint("\\n", { add_modifiers = { "Italic", "Dim" } })
   local r = ""
   if node.meta and node.meta.icon ~= nil then
-    r = node.meta.icon .. " "
+    r = node.meta.icon
   end
   local style = xplr.util.lscolor(node.absolute_path)
   style = xplr.util.style_mix({ style, node.style })
@@ -222,10 +222,10 @@ local function render_node(node)
   if node.is_dir then
     rel = rel .. "/"
   end
-  r = r .. xplr.util.paint(xplr.util.shell_escape(rel), style)
+  r = r .. xplr.util.paint(rel, style)
 
   if node.is_symlink then
-    r = r .. "-> "
+    r = r .. " → "
 
     if node.is_broken then
       r = r .. "×"
@@ -395,7 +395,9 @@ local function toggle(app)
     return
   end
   local path = app.focused_node.absolute_path
-  if state.tree[path].expansion == Expansion.CLOSED then
+  if not state.is_layout_active then
+    return { "Enter" }
+  elseif state.tree[path].expansion == Expansion.CLOSED then
     return open(app)
   elseif state.tree[path].expansion == Expansion.OPEN then
     return close(app)
@@ -557,6 +559,9 @@ local function goto_prev_open(app)
 end
 
 local function focus_next(app)
+  if not state.is_layout_active then
+    return { "FocusNext" }
+  end
   local dirbuf = app.directory_buffer
   if not dirbuf then
     return
@@ -589,6 +594,9 @@ local function focus_next(app)
 end
 
 local function focus_prev(app)
+  if not state.is_layout_active then
+    return { "FocusPrevious" }
+  end
   local dirbuf = app.directory_buffer
   if not dirbuf then
     return

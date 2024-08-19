@@ -1,3 +1,11 @@
+A custom fork of [tree-view.xplr](https://github.com/sayanarijit/tree-view.xplr)
+
+  - Make `j`, `k`, and `o` compatible with normal table
+  - `render_node`: drop `shell_escape`, replace `->` with `→`, remove space after icon
+  - Change `Expansion.OPEN` icon to `⛛`
+
+---
+
 # tree-view.xplr
 
 This plugin implements tree view support for xplr.
